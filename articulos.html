@@ -63,12 +63,12 @@
                 <div class="card" style="width: 18rem;">
                     <img src="imagenes/productos/iPhone-SE-Black.jpg" class="card-img-top" alt="iPhone SE">
                     <div class="card-body">
-                        <h5 class="card-title"><span id="spancodigo1">101</span> - <span id="spannombre1">iPhone
+                        <h5 class="card-title"><span name="spancodigo">101</span> - <span name="spannombre">iPhone
                                 SE</span></h5>
                         <p class="card-text">Procesador: A13 Bionic | Almacenamiento: 128 GB | Cámaras 7 Mp / 12 Mp|
                             Pantalla: 4,7 IPS Retina.</p>
-                        <h5>$ <span id="spanprecio1">74999</span></h5>
-                        <input class="form-control" type="number" value="0" min="0" max="30" id="inputcantidad1" onchange="calcularPedido()">
+                        <h5>$ <span name="spanprecio">74999</span></h5>
+                        <input class="form-control" type="number" value="0" min="0" max="30" name="inputcantidad" onchange="calcularPedido()">
                     </div>
                 </div>
             </div>
@@ -76,10 +76,10 @@
                 <div class="card" style="width: 18rem;">
                     <img src="imagenes/productos/Motorola-Moto-G100.jpg" class="card-img-top" alt="Motorola Moto G20">
                     <div class="card-body">
-                        <h5 class="card-title"><span id="spancodigo2">102</span> - <span id="spannombre2">Motorola Moto G20</span></h5>
+                        <h5 class="card-title"><span name="spancodigo">102</span> - <span name="spannombre">Motorola Moto G20</span></h5>
                         <p class="card-text">Procesador: Octa-Core (3,2 GHz) | Almacenamiento: 128 GB | Cámaras: 13 Mp / 64+16+2 Mp+ToF | Pantalla: 6,7 FHD+ LTPS...</p>
-                        <h5>$ <span id="spanprecio2">50000</span></h5>
-                        <input class="form-control" type="number" value="0" min="0" max="11" id="inputcantidad2" onchange="calcularPedido()">
+                        <h5>$ <span name="spanprecio">50000</span></h5>
+                        <input class="form-control" type="number" value="0" min="0" max="11" name="inputcantidad" onchange="calcularPedido()">
                     </div>
                 </div>
             </div>
@@ -87,10 +87,10 @@
                 <div class="card" style="width: 18rem;">
                     <img src="imagenes/productos/Iphone-11-Pro.jpg" class="card-img-top" alt="iPhone 11 Pro">
                     <div class="card-body">
-                        <h5 class="card-title"><span id="spancodigo3">103</span> - <span id="spannombre3">iPhone 11 Pro</span></h5>
+                        <h5 class="card-title"><span name="spancodigo">103</span> - <span name="spannombre">iPhone 11 Pro</span></h5>
                         <p class="card-text">Procesador: Chip A13 Bionic | Almacenamiento: 256 GB | Cámaras: 12 Mp / 12 Mp (Triple) | Pantalla: 5,8 Super Retina XDR - OLED Multi - Touch.</p>
-                        <h5>$ <span id="spanprecio3">232901</span></h5>
-                        <input class="form-control" type="number" value="0" min="0" max="25" id="inputcantidad3" onchange="calcularPedido()">
+                        <h5>$ <span name="spanprecio">232901</span></h5>
+                        <input class="form-control" type="number" value="0" min="0" max="25" name="inputcantidad" onchange="calcularPedido()">
                     </div>
                 </div>
             </div>
@@ -98,10 +98,10 @@
                 <div class="card" style="width: 18rem;">
                     <img src="imagenes/productos/Samsung-Galaxy-A72.jpg" class="card-img-top" alt="Samsung Galaxy A72">
                     <div class="card-body">
-                        <h5 class="card-title"><span id="spancodigo4">201</span> - <span id="spannombre4">Samsung Galaxy A72</span></h5>
+                        <h5 class="card-title"><span name="spancodigo">201</span> - <span name="spannombre">Samsung Galaxy A72</span></h5>
                         <p class="card-text">Procesador: Octa - Core(2, 3 GHz / 1, 8 GHz) | Almacenamiento: 128 GB | Cámaras: 32 Mp / 64 + 12 + 5 + 8 Mp | Pantalla: 6,7 FHD+ SuperAmoled.</p>
-                        <h5>$ <span id="spanprecio4">66999</span></h5>
-                        <input class="form-control" type="number" value="0" min="0" max="12" id="inputcantidad4" onchange="calcularPedido()">
+                        <h5>$ <span name="spanprecio">66999</span></h5>
+                        <input class="form-control" type="number" value="0" min="0" max="12" name="inputcantidad" onchange="calcularPedido()">
                     </div>
                 </div>
             </div>
@@ -120,34 +120,7 @@
                 </tr>
             </thead>
             <tbody id="detalle">
-                <tr>
-                    <td id="codigo1"></td>
-                    <td id="nombre1"></td>
-                    <td id="cantidad1"></td>
-                    <td id="precio1"></td>
-                    <td id="total1"></td>
-                </tr>
-                <tr>
-                    <td id="codigo2"></td>
-                    <td id="nombre2"></td>
-                    <td id="cantidad2"></td>
-                    <td id="precio2"></td>
-                    <td id="total2"></td>
-                </tr>
-                <tr>
-                    <td id="codigo3"></td>
-                    <td id="nombre3"></td>
-                    <td id="cantidad3"></td>
-                    <td id="precio3"></td>
-                    <td id="total3"></td>
-                </tr>
-                <tr>
-                    <td id="codigo4"></td>
-                    <td id="nombre4"></td>
-                    <td id="cantidad4"></td>
-                    <td id="precio4"></td>
-                    <td id="total4"></td>
-                </tr>
+                
             </tbody>
             <tfoot class="bg-success text-white">
                 <tr>
