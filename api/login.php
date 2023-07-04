@@ -7,7 +7,7 @@
     $password = "'".$valores->password."'";
 
     $usuarios = new ModeloABM('usuarios');
-    $usuarios->criterio = "usuario=$usuario AND password=$password";
+    $usuarios->set_criterio("usuario=$usuario AND password=$password");
     $datos = $usuarios->seleccionar();
     echo $datos;
 ?>

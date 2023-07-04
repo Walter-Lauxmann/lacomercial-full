@@ -46,42 +46,42 @@ class ModeloABM extends Modelo{
     }
 
     // Métodos Getter
-    public function getId(){
+    public function get_id(){
         return $this->id;
     }
-    public function getCriterio(){
+    public function get_criterio(){
         return $this->criterio;
     }
-    public function getOrden(){
+    public function get_orden(){
         return $this->orden;
     }
-    public function getCampos(){
+    public function get_campos(){
         return $this->campos;
     }
-    public function getLimit(){
+    public function get_limit(){
         return $this->limit;
     }
-    public function getJson(){
+    public function get_json(){
         return $this->json;
     }
 
     // Métodos Setter
-    public function setId($id){
+    public function set_id($id){
         $this->id = $id;
     }
-    public function setCriterio($criterio){
+    public function set_criterio($criterio){
         $this->criterio = $criterio;
     }
-    public function setOrden($orden){
+    public function set_orden($orden){
         $this->orden = $orden;
     }
-    public function setCampos($campos){
+    public function set_campos($campos){
         $this->campos = $campos;
     }
-    public function setLimit($limit){
+    public function set_limit($limit){
         $this->limit = $limit;
     }
-    public function setJson($json){
+    public function set_json($json){
         $this->json = $json;
     }
 
