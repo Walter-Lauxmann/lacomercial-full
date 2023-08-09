@@ -32,11 +32,14 @@ if(isset($_GET['tabla'])){  // Si está seteada GET['tabla']
 
             case 'actualizar':
                 $tabla->actualizar($valores);
-
+                $mensaje .= 'Datos actualizados';
+                echo json_encode($mensaje);
                 break;
 
             case 'eliminar':
                 $tabla->eliminar();
+                $mensaje .= 'Dato eliminado';
+                echo json_encode($mensaje);
                 break;
         }
     }

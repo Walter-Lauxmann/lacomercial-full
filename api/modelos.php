@@ -155,8 +155,8 @@ class Modelo extends Conexion{
         $sql= substr($sql,0,strlen($sql)-1); // Quitamos el último caracter (,) a $sql
         // Agregamos a la instrucción el criterio
         $sql .= " WHERE $this->criterio"; // DONDE $criterio
-        echo $sql.'<br />'; // Mostramos la instruccón sql resultante
-        $resultado = $this->_db->query($sql); // Ejecutamos la consulta la guardamos en $resultado
+        // echo $sql.'<br />'; // Mostramos la instruccón sql resultante
+        $this->_db->query($sql); // Ejecutamos la consulta
     }
 
     // Método para la eliminación de datos
@@ -164,7 +164,7 @@ class Modelo extends Conexion{
         // DELETE FROM productos WHERE id='10'
         // Guardamos en la variable $sql la instrucción DELETE
         $sql="DELETE FROM $this->tabla WHERE $this->criterio"; // ELIMINAR DESDE $tabla DONDE $criterio
-        $resultado = $this->_db->query($sql); // Ejecutamos la consulta la guardamos en $resultado
+        $this->_db->query($sql); // Ejecutamos la consulta
     }
 }
 ?> 

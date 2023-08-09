@@ -17,6 +17,13 @@ const inputDescripcion = document.querySelector("#descripcion");
 const inputPrecio = document.querySelector("#precio");
 const inputImagen = document.querySelector("#imagen");
 
+// Imagen del formulario
+const frmImagen = document.querySelector("#frmimagen");
+
+// Variables
+let opcion = '';
+let id;
+
 document.addEventListener("DOMContentLoaded", () => {
     mostrarArticulos();
 });
@@ -33,7 +40,7 @@ async function mostrarArticulos() {
     listado.innerHTML += `
               <div class="col">
                 <div class="card" style="width:18rem;">
-                    <img src="imagenes/productos/${articulo.imagen}" alt="${articulo.nombre}" class="card-img-top">
+                    <img src="imagenes/productos/${articulo.imagen?articulo.imagen:'nodisponible.png'}" alt="${articulo.nombre}" class="card-img-top">
                     <div class="card-body">
                         <h5 class="card-title">
                             <span name="spancodigo">${articulo.codigo}</span> - <span name="spannombre">${articulo.nombre}</span>
@@ -44,9 +51,15 @@ async function mostrarArticulos() {
                         <h5>$ <span name="spanprecio">${articulo.precio}</span></h5>
                         <input type="number" name="inputcantidad" class="form-control" value="0" min="0" max="30" onchange="calcularPedido()">
                     </div>
+                    <div class="card-footer d-flex justify-content-end">
+                            <a class="btnEditar btn btn-primary">Editar</a>
+                            <a class="btnBorrar btn btn-danger">Borrar</a>
+                            <input type="hidden" class="idArticulo" value="${articulo.id}">
+                            <input type="hidden" class="imagenArticulo" value="${articulo.imagen??'nodisponible.png'}">
+                        </div>
                 </div>
             </div>
-`;
+            `;
   }
 }
 
@@ -56,15 +69,31 @@ async function mostrarArticulos() {
 formulario.addEventListener('submit', function(e) {
     e.preventDefault();     // Prevenimos la acción por defecto
     const datos = new FormData(formulario); // Guardamos los datos del formulario
-    fetch(url + '&accion=insertar', {
-        method: 'POST',
-        body: datos
-    })
-    .then(res => res.json())
-    .then(data => {
-        insertarAlerta(data, 'success');
-        mostrarArticulos();
-    })
+
+    switch(opcion) {
+        case 'insertar':
+            fetch(url + '&accion=insertar', {
+                method: 'POST',
+                body: datos
+                })
+                .then(res => res.json())
+                .then(data => {
+                    insertarAlerta(data, 'success');
+                    mostrarArticulos();
+                });
+            break;
+        case 'actualizar':
+            fetch(url + '&accion=actualizar&id=' + id, { // Ejecutamos el método actualizar de la API
+                method: 'POST',
+                body: datos
+            })
+            .then(res => res.json())
+            .then(data => {
+                insertarAlerta(data, 'success');
+                mostrarArticulos();
+            });
+            break;
+    }    
 })
 
 /**
@@ -77,10 +106,13 @@ btnNuevo.addEventListener('click', () => {
     inputDescripcion.value = null;
     inputPrecio.value = null;
     inputImagen.value = null;
+    frmImagen.src = './imagenes/productos/nodisponible.png';
 
     // Mostramos el formulario
     formularioModal.show();
-})
+
+    opcion = 'insertar';
+});
 
 /**
  * Define el mensaje de alerta
@@ -96,4 +128,61 @@ const insertarAlerta = (mensaje, tipo) => {
     </div>
     `;
     alerta.append(envoltorio);
+};
+
+/** 
+ * Función on para determinar en qué elemento se realiza un evento 
+ * @param elemento el elemento al que se sealiza el evento 
+ * @param evento el ecento realizado
+ * @param selector el selector seleccionado
+ * @param manejador el método que maneja el evento
+ */
+const on = (elemento, evento, selector, manejador) => {
+    elemento.addEventListener(evento, e => {
+        if (e.target.closest(selector)) {
+            manejador(e);
+        }
+    })
 }
+
+/** 
+ * Ejecutamos la función on para el botón Editar 
+ */
+on(document, 'click', '.btnEditar', e => {
+    const cardFooter = e.target.parentNode; // Guardamos el elemento padre del botón
+    // Obtenemos los datos del artículo seleccionado
+    id = cardFooter.querySelector('.idArticulo').value;
+    const codigo = cardFooter.parentNode.querySelector('span[name=spancodigo]').innerHTML;
+    const nombre = cardFooter.parentNode.querySelector('span[name=spannombre]').innerHTML;
+    const descripcion = cardFooter.parentNode.querySelector('.card-text').innerHTML;
+    const precio = cardFooter.parentNode.querySelector('span[name=spanprecio]').innerHTML;
+    const imagen = cardFooter.querySelector('.imagenArticulo').value;
+    // Asignamos los valores a los input del formulario
+    inputCodigo.value = codigo;
+    inputNombre.value = nombre;
+    inputDescripcion.value = descripcion;
+    inputPrecio.value = precio;
+    frmImagen.src = `./imagenes/productos/${imagen}`;
+    formularioModal.show(); // Mostramos el formulario
+    opcion = 'actualizar';
+
+})
+
+/**
+ *  Ejecutamos la función on para el botón Borrar
+ */
+on(document, 'click', '.btnBorrar', e => {
+    const cardFooter = e.target.parentNode; // Guardamos el elemento padre del botón
+    id = cardFooter.querySelector('.idArticulo').value; // Obtenemos el id del artículo
+    const nombre = cardFooter.parentNode.querySelector('span[name=spannombre]').innerHTML; // Obtenemos el nombre del artículo
+    let aceptar = confirm(`¿Realmente desea eliminar a ${nombre}`); // Pedimos confirmación para eliminar
+    if (aceptar) {
+        console.log(nombre + " borrado");
+        fetch(url + '&accion=eliminar&id=' + id, {}) // Ejecutamos el método eliminar de la API
+            .then(res => res.json())
+            .then(data => {
+                insertarAlerta(data, 'danger');
+                mostrarArticulos();
+            })
+    }
+})
