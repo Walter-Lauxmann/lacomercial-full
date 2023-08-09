@@ -16,8 +16,32 @@ if(isset($_GET['tabla'])){  // Si está seteada GET['tabla']
     
     if(isset($_GET['accion'])){ // Si está seteada GET['accion']
         if($_GET['accion'] == 'insertar' || $_GET['accion'] == 'actualizar'){ // Si la accion es insertar o actualizar
-            $valores = $_POST;
+            $valores = $_POST; // Tomamos lo que viene del post
         }
+        // Subida de imágenes
+        if(                                       // si
+            isset($_FILES) &&                      // está seteado $_FILES Y
+            isset($_FILES['imagen']) &&            // está seteado $_FILES['imagen'] Y
+            !empty($_FILES['imagen']['name'] &&    // NO está vacío $_FILES['imagen']['name'] Y
+            !empty($_FILES['imagen']['tmp_name'])) // NO está vacío $_FILES['imagen']['tmp_name']
+            ) {
+            if(is_uploaded_file($_FILES['imagen']['tmp_name'])) {
+                $tmp_nombre = $_FILES['imagen']['tmp_name'];
+                $nombre = $_FILES['imagen']['name'];
+                $destino = '../imagenes/productos/' . $nombre;
+
+                if(move_uploaded_file($tmp_nombre, $destino)) {
+                    $mensaje .= "Archivo subido correctmente a " . $destino . "<br>";
+                    $valores['imagen'] = $nombre;
+                } else {
+                    $mensaje .= "Error: No se ha podido subir el archivo enviado";
+                    unlink(ini_get('upload_tmp_dir').$_FILES['imagen']['tmp_name']);
+                }
+            } else {
+                $mensaje .="Error: El archivo encontrado no fue procesado por la subida correctamente.<br>";
+            }
+        }
+
         switch($_GET['accion']){
             case 'seleccionar':
                 $datos= $tabla->seleccionar();
