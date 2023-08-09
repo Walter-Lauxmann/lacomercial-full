@@ -11,8 +11,8 @@ if($method == "OPTIONS") {
     die();
 }
 
-/* Clase principal */
-class Modelo{ 
+/* Clase Conexion */
+class Conexion{ 
     // Definimos la propiedad _db
     protected $_db; 
     // Creamos el constructor con la conexión a la Base de Datos
@@ -28,10 +28,10 @@ class Modelo{
         $this->_db->query("SET NAMES 'utf8'"); 
     } 
 } 
-/* Fin de la clase principal */
+/* Fin de la clase conexion */
 
-/* Clase ModeloABM basada en Modelo */
-class ModeloABM extends Modelo{
+/* Clase Modelo basada en Conexion */
+class Modelo extends Conexion{
     protected $tabla;          // nombre de la tabla
     protected $id= 0;          // id del registro
     protected $criterio= '';   // criterio para las consultas
@@ -114,11 +114,6 @@ class ModeloABM extends Modelo{
         // Si $json es verdadero
         if ($this->json){
             $json_datos = json_encode($datos) ; // Convertimos los datos en formato JSON
-            /*
-            $json_datos = str_replace('\\','',$json_datos);
-            $json_datos = str_replace('"{','{',$json_datos);
-            $json_datos = str_replace('}"','}',$json_datos);
-            */
             return $json_datos ; // Retornamos los datos en formato JSON
         }
         // Sino
@@ -144,8 +139,8 @@ class ModeloABM extends Modelo{
         $datos= substr($datos,0,strlen($datos)-1);    // Quitamos el último caracter (,) a $datos
         // Guardamos en la variable $sql la instrucción INSERT
         $sql="INSERT INTO $this->tabla($atributos) VALUES($datos)"; // INSERTAR DENTRO de $tabla en los ($atributos) los VALORES de ($datos)
-        echo $sql.'<br />'; // Mostramos la instrucción sql resultante
-        $resultado = $this->_db->query($sql); // Ejecutamos la consulta la guardamos en $resultado
+        // echo $sql.'<br />'; // Mostramos la instrucción sql resultante
+        $this->_db->query($sql); // Ejecutamos la consulta
     }
 
     // Método para la actualización de datos
