@@ -1,6 +1,4 @@
-import { obtenerArticulos } from "../modelos/articulos";
-
-const url = './api/datos.php?tabla=articulos';
+import { obtenerArticulos, insertarArticulos, actualizarArticulos, eliminarArticulos } from "../modelos/articulos";
 
 // Alerta
 const alerta = document.querySelector('#alerta');
@@ -23,6 +21,7 @@ const frmImagen = document.querySelector("#frmimagen");
 // Variables
 let opcion = '';
 let id;
+let mensajeAlerta;
 
 document.addEventListener("DOMContentLoaded", () => {
     mostrarArticulos();
@@ -72,28 +71,16 @@ formulario.addEventListener('submit', function(e) {
 
     switch(opcion) {
         case 'insertar':
-            fetch(url + '&accion=insertar', {
-                method: 'POST',
-                body: datos
-                })
-                .then(res => res.json())
-                .then(data => {
-                    insertarAlerta(data, 'success');
-                    mostrarArticulos();
-                });
+            mensajeAlerta = `Datos guardados`;
+            insertarArticulos(datos);                        
             break;
         case 'actualizar':
-            fetch(url + '&accion=actualizar&id=' + id, { // Ejecutamos el método actualizar de la API
-                method: 'POST',
-                body: datos
-            })
-            .then(res => res.json())
-            .then(data => {
-                insertarAlerta(data, 'success');
-                mostrarArticulos();
-            });
+            mensajeAlerta = `Datos actualizados`;
+            actualizarArticulos(datos, id);
             break;
-    }    
+    }
+    insertarAlerta(mensajeAlerta, 'success');
+    mostrarArticulos();
 })
 
 /**
@@ -177,12 +164,8 @@ on(document, 'click', '.btnBorrar', e => {
     const nombre = cardFooter.parentNode.querySelector('span[name=spannombre]').innerHTML; // Obtenemos el nombre del artículo
     let aceptar = confirm(`¿Realmente desea eliminar a ${nombre}`); // Pedimos confirmación para eliminar
     if (aceptar) {
-        console.log(nombre + " borrado");
-        fetch(url + '&accion=eliminar&id=' + id, {}) // Ejecutamos el método eliminar de la API
-            .then(res => res.json())
-            .then(data => {
-                insertarAlerta(data, 'danger');
-                mostrarArticulos();
-            })
+        eliminarArticulos(id);
+        insertarAlerta(`${nombre}  borrado`, 'danger');
+        mostrarArticulos();
     }
 })
