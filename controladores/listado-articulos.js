@@ -1,4 +1,4 @@
-import { obtenerArticulos, insertarArticulos, actualizarArticulos, eliminarArticulos } from "../modelos/articulos";
+import { seleccionarArticulos, insertarArticulos, actualizarArticulos, eliminarArticulos } from "../modelos/articulos";
 
 // Alerta
 const alerta = document.querySelector('#alerta');
@@ -68,7 +68,6 @@ async function mostrarArticulos() {
 formulario.addEventListener('submit', function(e) {
     e.preventDefault();     // Prevenimos la acción por defecto
     const datos = new FormData(formulario); // Guardamos los datos del formulario
-
     switch(opcion) {
         case 'insertar':
             mensajeAlerta = `Datos guardados`;
