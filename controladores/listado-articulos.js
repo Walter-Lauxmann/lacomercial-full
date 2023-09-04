@@ -51,7 +51,7 @@ async function mostrarArticulos() {
                         <h5>$ <span name="spanprecio">${articulo.precio}</span></h5>
                         <input type="number" name="inputcantidad" class="form-control" value="0" min="0" max="30" onchange="calcularPedido()">
                     </div>
-                    <div class="card-footer d-flex justify-content-end">
+                    <div class="card-footer d-flex justify-content-center">
                             <a class="btnEditar btn btn-primary">Editar</a>
                             <a class="btnBorrar btn btn-danger">Borrar</a>
                             <input type="hidden" class="idArticulo" value="${articulo.id}">
@@ -133,7 +133,7 @@ const insertarAlerta = (mensaje, tipo) => {
 /** 
  * Función on para determinar en qué elemento se realiza un evento 
  * @param elemento el elemento al que se sealiza el evento 
- * @param evento el ecento realizado
+ * @param evento el evento realizado
  * @param selector el selector seleccionado
  * @param manejador el método que maneja el evento
  */
