@@ -23,7 +23,25 @@ let opcion = '';
 let id;
 let mensajeAlerta;
 
+// Control de usuario
+let usuario = "";
+let logueado = false;
+
+const controlUsuario = () => { // function controlUsuario() {}
+    if (sessionStorage.getItem("usuario")) {
+      usuario = sessionStorage.getItem("usuario");
+      logueado = true;
+    }
+  
+    if (logueado) {
+      btnNuevo.style.display = "inline";
+    } else {
+      btnNuevo.style.display = "none";
+    }
+  };
+
 document.addEventListener("DOMContentLoaded", () => {
+    controlUsuario();
     mostrarArticulos();
 });
 
@@ -31,34 +49,54 @@ document.addEventListener("DOMContentLoaded", () => {
  * Obtiene los artículos y los muestra
  */
 async function mostrarArticulos() {
-  const articulos = await obtenerArticulos();
+  const articulos = await seleccionarArticulos();
   console.log(articulos);
   const listado = document.querySelector("#listado"); // getElementById("listado")
   listado.innerHTML = '';
   for (let articulo of articulos) {
-    listado.innerHTML += `
-              <div class="col">
-                <div class="card" style="width:18rem;">
-                    <img src="imagenes/productos/${articulo.imagen??'nodisponible.png'}" alt="${articulo.nombre}" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <span name="spancodigo">${articulo.codigo}</span> - <span name="spannombre">${articulo.nombre}</span>
-                        </h5>
-                        <p class="card-text">
-                            ${articulo.descripcion}.
-                        </p>
-                        <h5>$ <span name="spanprecio">${articulo.precio}</span></h5>
-                        <input type="number" name="inputcantidad" class="form-control" value="0" min="0" max="30" onchange="calcularPedido()">
-                    </div>
-                    <div class="card-footer d-flex justify-content-center">
+    if(logueado) {
+        listado.innerHTML += `
+                  <div class="col">
+                    <div class="card" style="width:18rem;">
+                        <img src="imagenes/productos/${articulo.imagen??'nodisponible.png'}" alt="${articulo.nombre}" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <span name="spancodigo">${articulo.codigo}</span> - <span name="spannombre">${articulo.nombre}</span>
+                            </h5>
+                            <p class="card-text">
+                                ${articulo.descripcion}.
+                            </p>
+                            <h5>$ <span name="spanprecio">${articulo.precio}</span></h5>
+                            <input type="number" name="inputcantidad" class="form-control" value="0" min="0" max="30" onchange="calcularPedido()">
+                        </div>
+                        <div class="card-footer d-flex justify-content-center">
                             <a class="btnEditar btn btn-primary">Editar</a>
                             <a class="btnBorrar btn btn-danger">Borrar</a>
                             <input type="hidden" class="idArticulo" value="${articulo.id}">
                             <input type="hidden" class="imagenArticulo" value="${articulo.imagen??'nodisponible.png'}">
                         </div>
+                    </div>
                 </div>
-            </div>
-            `;
+                `;
+    } else {
+        listado.innerHTML += `
+                  <div class="col">
+                    <div class="card" style="width:18rem;">
+                        <img src="imagenes/productos/${articulo.imagen??'nodisponible.png'}" alt="${articulo.nombre}" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <span name="spancodigo">${articulo.codigo}</span> - <span name="spannombre">${articulo.nombre}</span>
+                            </h5>
+                            <p class="card-text">
+                                ${articulo.descripcion}.
+                            </p>
+                            <h5>$ <span name="spanprecio">${articulo.precio}</span></h5>
+                            <input type="number" name="inputcantidad" class="form-control" value="0" min="0" max="30" onchange="calcularPedido()">
+                        </div>
+                    </div>
+                </div>
+                `;
+    }
   }
 }
 

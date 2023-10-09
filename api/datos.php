@@ -42,28 +42,28 @@ if(isset($_GET['tabla'])){  // Si está seteada GET['tabla']
             }
         }
 
-        switch($_GET['accion']){
-            case 'seleccionar':
-                $datos= $tabla->seleccionar();
-                echo $datos ;
+        switch($_GET['accion']) {               // Según la accion
+            case 'seleccionar':                     // En caso que sea 'seleccionar'
+               $datos = $tabla->seleccionar();      // Ejecutamos el método seleccionar()
+                echo $datos;                        // Devolvemos los datos
+                break;
+                
+            case 'insertar':                        // En caso que sea 'insertar'                
+                $tabla->insertar($valores);         // Ejecutamos el método insertar()
+                $mensaje .= 'Datos guardados';      // Creamos un mensaje
+                echo json_encode($mensaje);         // Mostramos el mensaje
                 break;
 
-            case 'insertar':                
-                $tabla->insertar($valores);
-                $mensaje .= 'Datos guardados';
-                echo json_encode($mensaje);
+            case 'actualizar':                      // En caso que sea 'actualizar'                
+                $tabla->actualizar($valores);       // Ejecutamos el método actualizar()
+                $mensaje .= 'Datos actualizados';   // Creamos un mensaje
+                echo json_encode($mensaje);         // Mostramos el mensaje
                 break;
 
-            case 'actualizar':
-                $tabla->actualizar($valores);
-                $mensaje .= 'Datos actualizados';
-                echo json_encode($mensaje);
-                break;
-
-            case 'eliminar':
-                $tabla->eliminar();
-                $mensaje .= 'Dato eliminado';
-                echo json_encode($mensaje);
+            case 'eliminar':                        // En caso que sea 'eliminar'
+                $tabla->eliminar();                 // Ejecutamos el método eliminar
+                $mensaje = 'Registro eliminado';    // Creamos un mensaje
+                echo json_encode($mensaje);         // Mostramos el mensaje
                 break;
         }
     }

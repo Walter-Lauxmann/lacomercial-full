@@ -37,7 +37,7 @@ class Modelo extends Conexion{
     protected $criterio= '';   // criterio para las consultas
     protected $orden= 'id';    // campo de ordenamiento
     protected $campos= '*';    // lista de campos
-    protected $limit= 0;       // cantidad de registros
+    protected $limite= 0;       // cantidad de registros
     protected $json= true;     // resultados en formato JSON
 
     public function __construct($t){ 
@@ -58,8 +58,8 @@ class Modelo extends Conexion{
     public function get_campos(){
         return $this->campos;
     }
-    public function get_limit(){
-        return $this->limit;
+    public function get_limite(){
+        return $this->limite;
     }
     public function get_json(){
         return $this->json;
@@ -78,8 +78,8 @@ class Modelo extends Conexion{
     public function set_campos($campos){
         $this->campos = $campos;
     }
-    public function set_limit($limit){
-        $this->limit = $limit;
+    public function set_limite($limite){
+        $this->limite = $limite;
     }
     public function set_json($json){
         $this->json = $json;
@@ -90,39 +90,39 @@ class Modelo extends Conexion{
         return $this->_db;
     }
 
-    // Método para seleccionar, entre paréntesis establecemos los parámetros
-    public function seleccionar(){
-        // SELECT * FROM productos WHERE id = '10' ORDER BY id LIMIT 10
-        // Guardamos en la variable $sql la instrucción SELECT
-        $sql =  "SELECT $this->campos FROM $this->tabla"; // SELECCIONAR $campos DESDE $tabla
+    /**
+     * Método de selección.
+     * Selecciona los registros de una tabla
+     * y los devuelve en formato JSON
+     * @return datos los datos en formato JSON
+     */
+    public function seleccionar() {
+        // SELECT * FROM articulos WHERE nombre LIKE '%samsung%' ORDER BY id LIMIT 10
+        $sql = "SELECT $this->campos FROM $this->tabla";
         // Si el criterio NO es igual a NADA
-        if($this->criterio != ''){
-            // Agregamos el criterio
-            $sql .= " WHERE $this->criterio"; // DONDE $criterio
+        if($this->criterio != '') {
+            $sql .= " WHERE $this->criterio"; // DONDE criterio
         }
-        // Agregamos el orden
-        $sql .= " ORDER BY $this->orden";  // ORDENADO POR $orden
-        // Si $limit es mayor que cero
-        if($this->limit > 0){
-            // Agregamos el límite
-            $sql .= " LIMIT $this->limit"; // LIMITE $limit
+        // Agregamos el ordenamiento
+        $sql .= " ORDER BY $this->orden";
+        // Si el límite es mayor que cero
+        if($this->limite > 0) {
+            $sql .= " LIMIT $this->limite";
         }
-        // echo $sql.'<br />'; // mostramos la instruccón sql resultante
-        $resultado = $this->_db->query($sql); // Ejecutamos la consulta la guardamos en $resultado
-        $datos = $resultado->fetch_all(MYSQLI_ASSOC); // Guardamos los datos resultantes en un array asociativo
-        
-        // Si $json es verdadero
-        if ($this->json){
-            $json_datos = json_encode($datos) ; // Convertimos los datos en formato JSON
-            return $json_datos ; // Retornamos los datos en formato JSON
-        }
-        // Sino
-        else{ 
-            return $datos; // Retornamos los datos en formato array asociativo
-        }        
+        // echo $sql . '<br>'; // Mostramos la instrucción SQL resultante
+        // Ejecutamos la consulta y la guardamos en $resultado
+        $resultado = $this->_db->query($sql);
+        // Obtenemos el resultado en array asociativo y lo transformamos a JSON
+        $datos = json_encode($resultado->fetch_all(MYSQLI_ASSOC));
+        // Retornamos los datos
+        return $datos;
     }
 
-    // Método para la inserción de datos
+    /**
+     * Método de inserción de datos
+     * Inserta registros en una tabla
+     * @param valores : los valores a insertar
+     */
     public function insertar($valores){
         // INSERT INTO productos(codigo,nombre,descripcion,precio,stock,imagen, id_proveedor)
         // VALUES ('201','Motorola G9', 'Un gran teléfono', '45000','10','motorolag9.jpg','1')
@@ -143,9 +143,13 @@ class Modelo extends Conexion{
         $this->_db->query($sql); // Ejecutamos la consulta
     }
 
-    // Método para la actualización de datos
+    /**
+     * Método para la actualización de datos 
+     * Modifica los registros de una tabla
+     * @param valores : los valores a modificar
+     */ 
     public function actualizar($valores){
-        // UPDATE productos SET precio = '35600' WHERE id='10'
+        // UPDATE articulos SET precio = '35600' WHERE id='10'
         $sql="UPDATE $this->tabla SET "; // ACTUALIZAR $tabla ESTABLECIENDO
         // Para cada $valores como $key => $value
         foreach ($valores as $key => $value) {
@@ -159,9 +163,12 @@ class Modelo extends Conexion{
         $this->_db->query($sql); // Ejecutamos la consulta
     }
 
-    // Método para la eliminación de datos
+    /**
+     * Método para la eliminación de datos 
+     * Elimina los registros de una tabla
+     */ 
     public function eliminar(){
-        // DELETE FROM productos WHERE id='10'
+        // DELETE FROM articulos WHERE id='10'
         // Guardamos en la variable $sql la instrucción DELETE
         $sql="DELETE FROM $this->tabla WHERE $this->criterio"; // ELIMINAR DESDE $tabla DONDE $criterio
         $this->_db->query($sql); // Ejecutamos la consulta
