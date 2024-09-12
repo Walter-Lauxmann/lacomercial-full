@@ -1,5 +1,5 @@
 // URL para acceder a la API
-const url = './api/datos.php?tabla=articulos';
+const url = './api/datos.php?tabla=productos';
 
 /**
  * Función asíncrona para seleccionar artículos 

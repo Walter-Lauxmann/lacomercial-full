@@ -23,6 +23,9 @@ let opcion = '';
 let id;
 let mensajeAlerta;
 
+const articulos = [];
+const articulo = {};
+
 // Control de usuario
 let usuario = "";
 let logueado = false;
@@ -49,8 +52,8 @@ document.addEventListener("DOMContentLoaded", () => {
  * Obtiene los artículos y los muestra
  */
 async function mostrarArticulos() {
-  const articulos = await seleccionarArticulos();
-  console.log(articulos);
+  this.articulos = await seleccionarArticulos();
+  console.log(this.articulos);
   const listado = document.querySelector("#listado"); // getElementById("listado")
   listado.innerHTML = '';
   for (let articulo of articulos) {
