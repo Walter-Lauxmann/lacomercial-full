@@ -5,6 +5,11 @@ import {
   eliminarArticulos,
 } from "../modelos/articulos";
 
+// Listado
+const listado = document.querySelector("#listado"); // getElementById("listado")
+
+
+
 // Alerta
 const alerta = document.querySelector("#alerta");
 
@@ -26,11 +31,13 @@ const inputImagen = document.querySelector("#imagen");
 const frmImagen = document.querySelector("#frmimagen");
 
 // Variables
+let buscar = "";
 let opcion = "";
 let id;
 let mensajeAlerta;
 
 let articulos = [];
+let articulosFiltrados = [];
 let articulo = {};
 
 // Control de usuario
@@ -51,21 +58,39 @@ const controlUsuario = () => {
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   controlUsuario();
+  articulos = await obtenerArticulos();
+  filtrarPorNombre('');
+  console.log(articulos); 
   mostrarArticulos();
 });
 
 /**
- * Obtiene los artículos y los muestra
+ * Obtiene los artículos
  */
-async function mostrarArticulos() {
-  articulos = await seleccionarArticulos();
-  console.log(articulos);
-  const listado = document.querySelector("#listado"); // getElementById("listado")
+async function obtenerArticulos() {
+  articulos = await seleccionarArticulos();  
+  return articulos;
+}
+
+/**
+ * Filtra los artículos por nombre
+ * @param n
+ * @return articulos
+ */
+function filtrarPorNombre(n) {
+  articulosFiltrados = articulos.filter(items => items.nombre.includes(n));
+  console.log(articulosFiltrados);
+  return articulosFiltrados;
+}
+
+/**
+ * Muestra los artículos
+ */
+function mostrarArticulos() {   
   listado.innerHTML = "";
-  for (let articulo of articulos) {
-    if (logueado) {
+  articulosFiltrados.map(articulo => {
       listado.innerHTML += `
                   <div class="col">
                     <div class="card" style="width:18rem;">
@@ -80,7 +105,7 @@ async function mostrarArticulos() {
                             <h5>$ <span name="spanprecio">${articulo.precio}</span></h5>
                             <input type="number" name="inputcantidad" class="form-control" value="0" min="0" max="30" onchange="calcularPedido()">
                         </div>
-                        <div class="card-footer d-flex justify-content-center">
+                        <div class="card-footer ${logueado?'d-flex':'none'} justify-content-center">
                             <button type="button" class="btnEditar btn btn-primary">Editar</button>
                             <button type="button" class="btnBorrar btn btn-danger">Borrar</button>
                             <input type="hidden" class="idArticulo" value="${articulo.id}">
@@ -88,27 +113,34 @@ async function mostrarArticulos() {
                     </div>
                 </div>
                 `;
-    } else {
-      listado.innerHTML += `
-                  <div class="col">
-                    <div class="card" style="width:18rem;">
-                        <img src="imagenes/productos/${articulo.imagen ?? "nodisponible.png"}" alt="${articulo.nombre}" class="card-img-top">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <span name="spancodigo">${articulo.codigo}</span> - <span name="spannombre">${articulo.nombre}</span>
-                            </h5>
-                            <p class="card-text">
-                                ${articulo.descripcion}.
-                            </p>
-                            <h5>$ <span name="spanprecio">${articulo.precio}</span></h5>
-                            <input type="number" name="inputcantidad" class="form-control" value="0" min="0" max="30" onchange="calcularPedido()">
-                        </div>
-                    </div>
-                </div>
-                `;
-    }
-  }
+  })
 };
+
+/**
+ * Filtro de datos
+ */
+const botonesFiltros = document.querySelectorAll('#filtros button');
+botonesFiltros.forEach(boton => {
+  
+  boton.addEventListener('click', e => {
+    boton.classList.add('active');
+    boton.setAttribute("aria-current","page"); 
+    botonesFiltros.forEach(otroBoton => {
+      if (otroBoton !== boton) {
+        otroBoton.classList.remove('active');
+        otroBoton.removeAttribute("aria-current");
+      }
+    });
+    buscar = boton.innerHTML;
+    if(buscar == 'Todos') {
+      buscar = '';
+    }
+    filtrarPorNombre(buscar);
+    mostrarArticulos();
+    
+  })
+});
+
 
 /**
  * Ejecuta el evento submit del formulario
